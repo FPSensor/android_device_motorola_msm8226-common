@@ -181,7 +181,11 @@ TARGET_RELEASETOOLS_EXTENSIONS := $(VENDOR_PATH)
 
 
 # Dexpreopt
-WITH_DEXPREOPT := false
+# Compile only the boot images and system_server ahead of time: without a
+# boot image everything runs interpreted and system_server trips the
+# watchdog, while compiling apps doesn't fit in system.
+WITH_DEXPREOPT := true
+WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
 WITH_DEXPREOPT_DEBUG_INFO := false
 USE_DEX2OAT_DEBUG := false
 DONT_DEXPREOPT_PREBUILTS := true

@@ -313,6 +313,9 @@ PRODUCT_PACKAGES += \
 # on first boot is slow on this eMMC; squashfs compresses them anyway.
 PRODUCT_COMPRESSED_APEX := false
 
+# The prebuilt qcrilhook/qcnvitems jars fail the uses-libraries check
+PRODUCT_BROKEN_VERIFY_USES_LIBRARIES := true
+
 # Compatibility for the old vendor blobs
 PRODUCT_PACKAGES += \
     libcnefeatureconfig \
