@@ -28,17 +28,17 @@ def FullOTA_PostValidate(info):
 
 
 def AddBootloaderAssertion(info, input_zip):
-  android_info = input_zip.read("OTA/android-info.txt")
+  android_info = input_zip.read("OTA/android-info.txt").decode()
   m = re.search(r"require\s+version-bootloader\s*=\s*(\S+)", android_info)
   if m:
     bootloaders = m.group(1).split("|")
     if "*" not in bootloaders:
       info.script.AssertSomeBootloader(*bootloaders)
-    info.metadata["pre-bootloader"] = m.group(1)
 
 
 def ResizeSystem(info):
-  if info.metadata["ota-type"] == "BLOCK":
+  # Only an ext4 system can be grown to the partition size
+  if info.info_dict.get("system_fs_type", "ext4") == "ext4":
     fstab = info.info_dict.get("fstab", None)
     system_block = fstab["/system"].device
     e2fsck = "/tmp/install/bin/e2fsck_static"
