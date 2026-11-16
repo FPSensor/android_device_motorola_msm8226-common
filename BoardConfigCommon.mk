@@ -54,6 +54,10 @@ BOARD_ROOT_EXTRA_SYMLINKS := \
 
 LZMA_RAMDISK_TARGETS := recovery
 TARGET_KERNEL_SOURCE := kernel/motorola/msm8226
+# The 3.4 kernel only builds with GCC (prebuilts/gcc arm-linux-androideabi-4.9)
+TARGET_KERNEL_CLANG_COMPILE := false
+# Host tools still build with the tree clang
+TARGET_KERNEL_CLANG_VERSION := r563880c
 
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "qualcomm-smd"
