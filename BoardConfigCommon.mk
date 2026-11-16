@@ -123,7 +123,6 @@ SMALLER_FONT_FOOTPRINT := true
 
 # HIDL
 DEVICE_MANIFEST_FILE := $(VENDOR_PATH)/manifest.xml
-DEVICE_MATRIX_FILE := $(VENDOR_PATH)/compatibility_matrix.xml
 
 # Keymaster
 TARGET_KEYMASTER_SKIP_WAITING_FOR_QSEE := true

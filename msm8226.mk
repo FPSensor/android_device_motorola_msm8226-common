@@ -94,9 +94,9 @@ PRODUCT_PACKAGES += \
     libqcomvoiceprocessing
 
 PRODUCT_PACKAGES += \
-    android.hardware.audio@4.0-impl \
-    android.hardware.audio.effect@4.0-impl \
-    android.hardware.broadcastradio@1.0-impl
+    android.hardware.audio@7.1-impl \
+    android.hardware.audio.effect@7.0-impl \
+    android.hardware.audio.service.msm8226
 
 # Audio configuration
 PRODUCT_COPY_FILES += \
@@ -168,6 +168,8 @@ PRODUCT_PACKAGES += \
 # Display
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.allocator@2.0-service \
+    android.hardware.graphics.composer@2.1-service \
     android.hardware.graphics.mapper@2.0-impl-2.1 \
     android.hardware.memtrack@1.0-impl \
     android.hardware.memtrack@1.0-service \
@@ -294,6 +296,9 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 # OTA package: without a recovery image the build can't find a recovery
 # fstab and skips the flashable zip; build it anyway (flashed from TWRP).
 PRODUCT_BUILD_GENERIC_OTA_PACKAGE := true
+
+# VINTF: the 4.4 era HALs predate the current framework matrices
+PRODUCT_ENFORCE_VINTF_MANIFEST_OVERRIDE := true
 
 # Compatibility for the old vendor blobs
 PRODUCT_PACKAGES += \
