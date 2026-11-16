@@ -412,6 +412,8 @@ PRODUCT_PACKAGES += \
 # Bring-up debugging (non-user builds): adbd in early-init, as root and
 # without authorization, and no Rescue Party (there's no recovery to fall
 # back to).
+# The full logcat is also kept in /data/misc/logd across reboots, to read
+# it from recovery when adb isn't up.
 ifneq ($(TARGET_BUILD_VARIANT),user)
 PRODUCT_PACKAGES += \
     init.debug.adb.rc
@@ -423,5 +425,8 @@ PRODUCT_VENDOR_PROPERTIES += \
     persist.sys.usb.config=adb \
     persist.sys.disable_rescue=true \
     ro.logd.kernel=true \
-    persist.logd.size=4M
+    persist.logd.size=4M \
+    persist.logd.logpersistd=logcatd \
+    persist.logd.logpersistd.buffer=all \
+    persist.logd.logpersistd.size=20
 endif
