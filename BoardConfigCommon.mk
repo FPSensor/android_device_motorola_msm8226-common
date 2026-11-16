@@ -229,5 +229,6 @@ WPA_SUPPLICANT_VERSION := VER_0_8_X
 # Power
 TARGET_USES_INTERACTION_BOOST := true
 
-# fstab mounts /cache, which isn't created by default any more
-BOARD_ROOT_EXTRA_FOLDERS += cache
+# The old cache partition is mounted as /metadata (aconfigd keeps the
+# feature flag storage there; Android 16 doesn't use /cache)
+BOARD_ROOT_EXTRA_FOLDERS += metadata
