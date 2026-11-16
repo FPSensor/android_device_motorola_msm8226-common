@@ -297,6 +297,10 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 
 # Radio
 
+# Fstab (first stage init mounts system and vendor from the ramdisk copy)
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
+
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
