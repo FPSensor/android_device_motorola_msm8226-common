@@ -178,6 +178,11 @@ PRODUCT_PACKAGES += \
     hwcomposer.msm8226 \
     memtrack.msm8226
 
+# Display: the GLES blobs are libEGL_adreno.so & co, and Android 16 only
+# loads them through ro.hardware.egl
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.hardware.egl=adreno
+
 # Display
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.surface_flinger.max_frame_buffer_acquired_buffers=3 \

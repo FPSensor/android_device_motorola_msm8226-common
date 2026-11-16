@@ -2,6 +2,11 @@
 # apexd-bootstrap mounted the adbd APEX (ro.boot.apex.early_adbd=true), so
 # there is a shell even if the boot dies before /data is mounted.
 on early-init && property:ro.debuggable=1
+    # This kernel lacks async I/O on FunctionFS; set before adbd starts
+    # (init.qcom.usb.rc only does it on init, after early-init)
+    setprop sys.usb.ffs.aio_compat 1
+    setprop persist.adb.nonblocking_ffs 0
+    setprop ro.adb.nonblocking_ffs 0
     mkdir /dev/usb-ffs 0770 shell shell
     mkdir /dev/usb-ffs/adb 0770 shell shell
     mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
