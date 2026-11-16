@@ -184,10 +184,11 @@ TARGET_LD_SHIM_LIBS := \
     /vendor/bin/thermal-engine|libshims_thermal.so \
     /vendor/bin/mpdecision|libshims_atomic.so \
     /system/lib/hw/camera.vendor.msm8226.so|libshims_camera.so \
-    /system/lib/libmot_sensorlistener.so|libshims_sensorlistener.so \
-    /vendor/lib/libqc-opt.so|libshim_qcopt.so \
-    /system/lib/libskia.so|libshim_skia.so \
     /vendor/lib/libperipheral_client.so|libshim_binder.so
+
+ifeq ($(TARGET_HAS_CAMERA),true)
+TARGET_LD_SHIM_LIBS += /system/lib/libmot_sensorlistener.so|libshims_sensorlistener.so
+endif
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true

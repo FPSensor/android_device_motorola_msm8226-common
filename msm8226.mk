@@ -128,17 +128,13 @@ PRODUCT_PACKAGES += \
     camera.device@1.0-impl \
     camera.msm8226 \
     libshims_camera \
+    libshims_sensorlistener \
     Snap
 endif
 
 PRODUCT_PACKAGES += \
-    libxml2 \
-    libshim_skia \
-    libshim_qcopt \
-    libshims_sensorlistener
+    libxml2
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilts/libskia.so:system/lib/libskia.so
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/hdrhax:system/vendor/etc/hdrhax
@@ -257,8 +253,7 @@ PRODUCT_PACKAGES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-impl \
-    lights.msm8226
+    android.hardware.light-service.lineage
 
 # LiveDisplay
 
