@@ -291,6 +291,10 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 
 # Radio
 
+# OTA package: without a recovery image the build can't find a recovery
+# fstab and skips the flashable zip; build it anyway (flashed from TWRP).
+PRODUCT_BUILD_GENERIC_OTA_PACKAGE := true
+
 # Fstab (first stage init mounts system and vendor from the ramdisk copy)
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
