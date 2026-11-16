@@ -144,13 +144,14 @@ MALLOC_SVELTE := true
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072
 
-# Android 16 doesn't fit in the stock system partition. The old cache
-# partition (Android 16 keeps its cache in /data) holds /product, and
-# vendor stays inside system, so no repartitioning is needed. The sizes
-# are set per device.
+# Android 16 doesn't fit in the stock system partitions uncompressed:
+# keep everything (vendor and product too) in a squashfs system, until the
+# devices get repartitioned. gzip is the only compressor both this kernel
+# and mksquashfs support. The cache partition stays /cache.
 TARGET_COPY_OUT_VENDOR := system/vendor
-TARGET_COPY_OUT_PRODUCT := product
-BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
+TARGET_COPY_OUT_PRODUCT := system/product
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := squashfs
+BOARD_SYSTEMIMAGE_SQUASHFS_COMPRESSOR := gzip
 
 # Keep the dex of privileged apps compressed to save space in system
 DONT_UNCOMPRESS_PRIV_APPS_DEXS := true
