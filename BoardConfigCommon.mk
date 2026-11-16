@@ -161,6 +161,9 @@ BOARD_USES_QCOM_HARDWARE := true
 # The Android 16 recovery (~18 MB with the kernel) doesn't fit the 10 MB
 # recovery partition; flash with TWRP instead.
 TARGET_NO_RECOVERY := true
+
+# Not A/B (Android 16 defaults to it): build a block based OTA zip
+AB_OTA_UPDATER := false
 BOARD_NO_SECURE_DISCARD := true
 TARGET_RECOVERY_FSTAB := $(VENDOR_PATH)/rootdir/etc/fstab.qcom
 TARGET_RECOVERY_DENSITY := hdpi
