@@ -140,11 +140,16 @@ MALLOC_SVELTE := true
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072
 
-# Vendor lives on the old cache partition (Android 16 keeps its cache in
-# /data), so system and vendor are split like on newer devices without
-# repartitioning. The size is set per device.
-TARGET_COPY_OUT_VENDOR := vendor
-BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+# Android 16 doesn't fit in the stock system partition. The old cache
+# partition (Android 16 keeps its cache in /data) holds /product, and
+# vendor stays inside system, so no repartitioning is needed. The sizes
+# are set per device.
+TARGET_COPY_OUT_VENDOR := system/vendor
+TARGET_COPY_OUT_PRODUCT := product
+BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
+
+# Keep the dex of privileged apps compressed to save space in system
+DONT_UNCOMPRESS_PRIV_APPS_DEXS := true
 
 # Properties
 TARGET_SYSTEM_PROP += $(VENDOR_PATH)/system.prop
