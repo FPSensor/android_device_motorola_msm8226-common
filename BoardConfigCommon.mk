@@ -88,6 +88,8 @@ QCOM_BT_USE_BTNV := true
 
 # Broken Rules
 BUILD_BROKEN_DUP_RULES := true
+# The Android 10 era blob makefiles install ELF prebuilts with PRODUCT_COPY_FILES
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
 # Camera
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
