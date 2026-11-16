@@ -295,6 +295,15 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 # fstab and skips the flashable zip; build it anyway (flashed from TWRP).
 PRODUCT_BUILD_GENERIC_OTA_PACKAGE := true
 
+# Compatibility for the old vendor blobs
+PRODUCT_PACKAGES += \
+    libcnefeatureconfig \
+    libcurl.vendor \
+    libnetutils.vendor \
+    libsqlite.vendor \
+    libstdc++_vendor \
+    libstdc++_vendor_compat_symlink
+
 # Fstab (first stage init mounts system and vendor from the ramdisk copy)
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom

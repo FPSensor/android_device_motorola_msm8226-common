@@ -166,8 +166,6 @@ TARGET_USERIMAGES_USE_F2FS := true
 # Release tools
 TARGET_RELEASETOOLS_EXTENSIONS := $(VENDOR_PATH)
 
-# Render
-OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 
 # Dexpreopt
 WITH_DEXPREOPT_DEBUG_INFO := false
