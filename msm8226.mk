@@ -137,7 +137,7 @@ PRODUCT_PACKAGES += \
 
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/hdrhax:system/vendor/etc/hdrhax
+    $(LOCAL_PATH)/configs/hdrhax:$(TARGET_COPY_OUT_VENDOR)/etc/hdrhax
 
 # Charger
 PRODUCT_PACKAGES += \
