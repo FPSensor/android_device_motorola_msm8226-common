@@ -153,6 +153,9 @@ TARGET_SYSTEM_PROP += $(VENDOR_PATH)/system.prop
 BOARD_USES_QCOM_HARDWARE := true
 
 # Recovery
+# The Android 16 recovery (~18 MB with the kernel) doesn't fit the 10 MB
+# recovery partition; flash with TWRP instead.
+TARGET_NO_RECOVERY := true
 BOARD_NO_SECURE_DISCARD := true
 TARGET_RECOVERY_FSTAB := $(VENDOR_PATH)/rootdir/etc/fstab.qcom
 TARGET_RECOVERY_DENSITY := hdpi
