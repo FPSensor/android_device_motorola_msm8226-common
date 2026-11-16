@@ -303,6 +303,11 @@ PRODUCT_PACKAGES += \
     android.hardware.radio@1.4-service.msm8226 \
     android.hardware.radio.config@1.1-service.msm8226
 
+# APEX: ship them uncompressed. A compressed adbd can't be mounted early
+# (androidboot.apex.early_adbd), and decompressing every APEX into /data
+# on first boot is slow on this eMMC; squashfs compresses them anyway.
+PRODUCT_COMPRESSED_APEX := false
+
 # Compatibility for the old vendor blobs
 PRODUCT_PACKAGES += \
     libcnefeatureconfig \
