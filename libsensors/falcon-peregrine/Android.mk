@@ -51,6 +51,7 @@ ifeq ($(DISPLAY_ROTATION_SENSOR_ENABLED), true)
 endif
 
 LOCAL_SHARED_LIBRARIES := liblog libcutils libdl
+LOCAL_HEADER_LIBRARIES := libhardware_headers
 
 include $(BUILD_SHARED_LIBRARY)
 
