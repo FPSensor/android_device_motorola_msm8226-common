@@ -96,7 +96,7 @@ TARGET_USES_MEDIA_EXTENSIONS := true
 TARGET_NEEDS_LEGACY_CAMERA_HAL1_DYN_NATIVE_HANDLE := true
 TARGET_PROCESS_SDK_VERSION_OVERRIDE += \
     /system/bin/mediaserver=22 \
-    /system/vendor/bin/mm-qcamera-daemon=22
+    /vendor/bin/mm-qcamera-daemon=22
 
 # Charger
 BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
@@ -181,13 +181,13 @@ BOARD_SEPOLICY_DIRS += \
 
 # Shims
 TARGET_LD_SHIM_LIBS := \
-    /system/vendor/bin/thermal-engine|libshims_thermal.so \
-    /system/vendor/bin/mpdecision|libshims_atomic.so \
+    /vendor/bin/thermal-engine|libshims_thermal.so \
+    /vendor/bin/mpdecision|libshims_atomic.so \
     /system/lib/hw/camera.vendor.msm8226.so|libshims_camera.so \
     /system/lib/libmot_sensorlistener.so|libshims_sensorlistener.so \
-    /system/vendor/lib/libqc-opt.so|libshim_qcopt.so \
+    /vendor/lib/libqc-opt.so|libshim_qcopt.so \
     /system/lib/libskia.so|libshim_skia.so \
-    /system/vendor/lib/libperipheral_client.so|libshim_binder.so
+    /vendor/lib/libperipheral_client.so|libshim_binder.so
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
