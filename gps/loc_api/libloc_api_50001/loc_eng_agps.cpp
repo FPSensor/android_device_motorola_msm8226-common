@@ -292,7 +292,7 @@ AgpsState* AgpsReleasedState::onRsrcEvent(AgpsRsrcStatus event, void* data)
         Notification notification(subscriber, event, false);
         subscriber->notifyRsrcStatus(notification);
     }
-        // break;
+        break;
     case RSRC_GRANTED:
     case RSRC_RELEASED:
     case RSRC_DENIED:
@@ -624,12 +624,12 @@ AgpsStateMachine::AgpsStateMachine(servicerType servType,
                                    void *cb_func,
                                    AGpsExtType type,
                                    bool enforceSingleSubscriber) :
-    mStatePtr(new AgpsReleasedState(this)),mType(type),
+    mServicer(Servicer :: getServicer(servType, (void *)cb_func)),
+    mStatePtr(new AgpsReleasedState(this)), mType(type),
     mAPN(NULL),
     mAPNLen(0),
-    mBearer(APN_IP_INVALID),
-    mEnforceSingleSubscriber(enforceSingleSubscriber),
-    mServicer(Servicer :: getServicer(servType, (void *)cb_func))
+    mBearer(AGPS_APN_BEARER_INVALID),
+    mEnforceSingleSubscriber(enforceSingleSubscriber)
 {
     linked_list_init(&mSubscribers);
 
@@ -688,7 +688,7 @@ void AgpsStateMachine::setAPN(const char* apn, unsigned int len)
     if (NULL != apn) {
         mAPN = new char[len+1];
         memcpy(mAPN, apn, len);
-        mAPN[len] = NULL;
+        mAPN[len] = '\0';
 
         mAPNLen = len;
     } else {
@@ -761,13 +761,12 @@ int AgpsStateMachine::sendRsrcRequest(AGpsStatusValue action) const
         nifRequest.status = action;
 
         if (s == NULL) {
-            nifRequest.ipaddr = INADDR_NONE;
-            memset(&nifRequest.addr, 0, sizeof(nifRequest.addr));
+            nifRequest.ipv4_addr = INADDR_NONE;
+            memset(&nifRequest.addr, 0,  sizeof(nifRequest.addr));
             nifRequest.ssid[0] = '\0';
             nifRequest.password[0] = '\0';
         } else {
-            s->setIPAddresses(nifRequest.ipaddr,
-                    (char *)&((struct sockaddr_in6*)&(nifRequest.addr))->sin6_addr);
+            s->setIPAddresses(nifRequest.addr);
             s->setWifiInfo(nifRequest.ssid, nifRequest.password);
         }
 
@@ -928,12 +927,12 @@ void DSStateMachine :: onRsrcEvent(AgpsRsrcStatus event)
         //pending state, we translate that to a RSRC_DENIED state
         //since the callback from DSI is either RSRC_GRANTED or RSRC_RELEASED
         //for when the call is connected or disconnected respectively.
-        if((void *)mStatePtr != currState)
-            break;
-        else {
+        if((void *)mStatePtr == currState) {
             event = RSRC_DENIED;
             LOC_LOGE(" Switching event to RSRC_DENIED\n");
+            mStatePtr = mStatePtr->onRsrcEvent(event, NULL);
         }
+        break;
     case RSRC_DENIED:
         mStatePtr = mStatePtr->onRsrcEvent(event, NULL);
         break;
@@ -961,7 +960,7 @@ void DSStateMachine :: informStatus(AgpsRsrcStatus status, int ID) const
     case RSRC_GRANTED:
         mLocAdapter->atlOpenStatus(ID, 1,
                                                      NULL,
-                                                     APN_IP_INVALID,
+                                                     AGPS_APN_BEARER_INVALID,
                                                      AGPS_TYPE_INVALID);
         break;
     default:

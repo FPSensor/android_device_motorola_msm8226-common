@@ -1,12 +1,8 @@
-ifneq ($(BUILD_TINY_ANDROID),true)
-#Compile this library only for builds with the latest modem image
-
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := libloc_eng
-LOCAL_MODULE_OWNER := qcom
 LOCAL_PROPRIETARY_MODULE := true
 
 LOCAL_MODULE_TAGS := optional
@@ -24,6 +20,7 @@ LOCAL_SRC_FILES += \
     loc_eng.cpp \
     loc_eng_agps.cpp \
     loc_eng_xtra.cpp \
+    XtraValidityQuery.cpp \
     loc_eng_ni.cpp \
     loc_eng_log.cpp \
     loc_eng_nmea.cpp \
@@ -37,40 +34,42 @@ LOCAL_SRC_FILES += \
     loc_eng_dmn_conn_glue_pipe.c
 
 LOCAL_CFLAGS += \
+     -Werror \
      -fno-short-enums \
      -D_ANDROID_ \
      -Wno-unused-parameter
 
+# A device whose modem dates an XTRA window whole 1024-week GPS eras early
+# sets TARGET_XTRA_ACCEPT_WEEK_ERA_ALIAS so the injection result counts that
+# window as current.
+ifeq ($(TARGET_XTRA_ACCEPT_WEEK_ERA_ALIAS),true)
+LOCAL_CFLAGS += -DXTRA_VALIDITY_ACCEPT_WEEK_ERA_ALIAS
+endif
+
 LOCAL_C_INCLUDES:= \
     $(TARGET_OUT_HEADERS)/gps.utils \
     $(TARGET_OUT_HEADERS)/libloc_core \
-    $(LOCAL_DIR)
+    $(LOCAL_PATH) \
+    $(LOCAL_PATH)/../loc_api_v02 \
+    $(TARGET_OUT_HEADERS)/libflp
 
-LOCAL_COPY_HEADERS_TO:= libloc_eng/
-LOCAL_COPY_HEADERS:= \
-   LocEngAdapter.h \
-   loc.h \
-   loc_eng.h \
-   loc_eng_xtra.h \
-   loc_eng_ni.h \
-   loc_eng_agps.h \
-   loc_eng_msg.h \
-   loc_eng_log.h
-
-LOCAL_PRELINK_MODULE := false
+LOCAL_HEADER_LIBRARIES := libgps.utils_headers libloc_core_headers libhardware_headers
 
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := libloc_eng_headers
+LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
+include $(BUILD_HEADER_LIBRARY)
+
+include $(CLEAR_VARS)
 
 LOCAL_MODULE := gps.$(TARGET_BOARD_PLATFORM)
-LOCAL_MODULE_OWNER := qcom
 LOCAL_PROPRIETARY_MODULE := true
 
 LOCAL_MODULE_TAGS := optional
 
 ## Libs
-
 LOCAL_SHARED_LIBRARIES := \
     libutils \
     libcutils \
@@ -86,22 +85,19 @@ LOCAL_SRC_FILES += \
     gps.c
 
 LOCAL_CFLAGS += \
+    -Werror \
     -fno-short-enums \
      -D_ANDROID_ \
      -Wno-unused-parameter
 
-ifeq ($(TARGET_USES_QCOM_BSP), true)
-LOCAL_CFLAGS += -DTARGET_USES_QCOM_BSP
-endif
-
 ## Includes
 LOCAL_C_INCLUDES:= \
     $(TARGET_OUT_HEADERS)/gps.utils \
-    $(TARGET_OUT_HEADERS)/libloc_core
+    $(TARGET_OUT_HEADERS)/libloc_core \
+    $(TARGET_OUT_HEADERS)/libflp
 
-LOCAL_PRELINK_MODULE := false
-LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
+LOCAL_MODULE_RELATIVE_PATH := hw
+
+LOCAL_HEADER_LIBRARIES := libgps.utils_headers libloc_core_headers libhardware_headers
 
 include $(BUILD_SHARED_LIBRARY)
-
-endif # not BUILD_TINY_ANDROID

@@ -120,7 +120,6 @@ static int loc_api_server_proc(void *context)
     int result = 0;
     static int cnt = 0;
     struct ctrl_msgbuf * p_cmsgbuf;
-    struct ctrl_msgbuf cmsg_resp;
 
     sz = sizeof(struct ctrl_msgbuf) + 256;
     p_cmsgbuf = (struct ctrl_msgbuf *) malloc(sz);
@@ -137,7 +136,7 @@ static int loc_api_server_proc(void *context)
         free(p_cmsgbuf);
         LOC_LOGE("%s:%d] fail receiving msg from gpsone_daemon, retry later\n", __func__, __LINE__);
         usleep(1000);
-        return 0;
+        return -1;
     }
 
     LOC_LOGD("%s:%d] received ctrl_type = %d\n", __func__, __LINE__, p_cmsgbuf->ctrl_type);
@@ -267,4 +266,3 @@ int loc_eng_dmn_conn_loc_api_server_data_conn(int sender_id, int status) {
   }
   return 0;
 }
-

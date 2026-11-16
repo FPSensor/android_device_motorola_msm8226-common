@@ -23,7 +23,9 @@ ifeq ($(GO_BUILD),true)
 endif
 
 # Soong
-PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
+PRODUCT_SOONG_NAMESPACES += \
+    $(LOCAL_PATH) \
+    hardware/qcom-caf/bt/libbt-vendor
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += \
@@ -79,15 +81,10 @@ TARGET_SCREEN_WIDTH := 720
 TARGET_BOOTANIMATION_HALF_RES := true
 
 # ANT+
-PRODUCT_PACKAGES += \
-    AntHalService \
-    com.dsi.ant.antradio_library \
-    libantradio
 
 # Audio
 PRODUCT_PACKAGES += \
     audio.primary.msm8226 \
-    audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default \
 
@@ -124,17 +121,22 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0-service \
     libbt-vendor
 
-# Camera
+# Camera (the HAL1 wrapper still links platform libraries from vendor;
+# disabled until it is reworked for Android 16)
+ifeq ($(TARGET_HAS_CAMERA),true)
 PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl \
     camera.device@1.0-impl \
     camera.msm8226 \
+    libshims_camera \
+    Snap
+endif
+
+PRODUCT_PACKAGES += \
     libxml2 \
     libshim_skia \
-    libshims_camera \
     libshim_qcopt \
-    libshims_sensorlistener \
-    Snap
+    libshims_sensorlistener
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilts/libskia.so:system/lib/libskia.so
@@ -171,12 +173,10 @@ PRODUCT_PACKAGES += \
 # Display
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \
-    android.hardware.graphics.composer@2.1-impl \
     android.hardware.graphics.mapper@2.0-impl-2.1 \
     android.hardware.memtrack@1.0-impl \
     android.hardware.memtrack@1.0-service \
     android.hardware.configstore@1.1-service \
-    copybit.msm8226 \
     gralloc.msm8226 \
     hwcomposer.msm8226 \
     memtrack.msm8226
@@ -187,10 +187,6 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.surface_flinger.start_graphics_allocator_service=true
 
 # Ebtables
-PRODUCT_PACKAGES += \
-    ebtables \
-    ethertypes \
-    libebtc
 
 # FM
 PRODUCT_PACKAGES += \
@@ -215,7 +211,6 @@ PRODUCT_ALWAYS_PREOPT_EXTRACTED_APK := true
 # Use a profile based boot image for this device. Note that this is currently a
 # generic profile and not Android Go optimized.
 PRODUCT_USE_PROFILE_FOR_BOOT_IMAGE := true
-PRODUCT_DEX_PREOPT_BOOT_IMAGE_PROFILE_LOCATION := frameworks/base/config/boot-image-profile.txt
 
 # Strip the local variable table and the local variable type table to reduce
 # the size of the system image. This has no bearing on stack traces, but will
@@ -226,7 +221,6 @@ PRODUCT_MINIMIZE_JAVA_DEBUG_INFO := true
 PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD := false
 
 # Do not spin up a separate process for the network stack on go devices, use an in-process APK.
-PRODUCT_PACKAGES += InProcessNetworkStack
 
 # Disable Scudo to save RAM.
 PRODUCT_DISABLE_SCUDO := true
@@ -246,8 +240,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Health
 PRODUCT_PACKAGES += \
-    android.hardware.health@2.0-impl \
-    android.hardware.health@2.0-service
+    android.hardware.health@2.1-impl \
+    android.hardware.health@2.1-service
 
 # HIDL
 PRODUCT_PACKAGES += \
@@ -260,8 +254,7 @@ PRODUCT_COPY_FILES += \
 
 # Keystore
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@3.0-impl \
-    keystore.msm8226
+    android.hardware.keymaster@3.0-impl
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -269,8 +262,6 @@ PRODUCT_PACKAGES += \
     lights.msm8226
 
 # LiveDisplay
-PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@2.0-service-sysfs
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -284,7 +275,6 @@ PRODUCT_COPY_FILES += \
 
 # OMX
 PRODUCT_PACKAGES += \
-    android.hardware.media.omx@1.0-impl \
     android.hardware.media.omx@1.0-service \
     libOmxCore \
     libOmxVdec \
@@ -297,18 +287,15 @@ PRODUCT_PACKAGES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.1-service.moto8226
+    android.hardware.power-service-qti
     
 # Preopt
 PRODUCT_DEXPREOPT_SPEED_APPS += \
     Settings \
-    Snap \
     SystemUI \
     TrebuchetQuickStep
 
 # Radio
-PRODUCT_PACKAGES += \
-    libcnefeatureconfig
 
 # Ramdisk
 PRODUCT_PACKAGES += \
@@ -329,9 +316,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
 
-# Ril
-PRODUCT_PACKAGES += \
-    libqsap_shim
 
 # Seccomp policy
 PRODUCT_COPY_FILES += \
@@ -343,8 +327,6 @@ PRODUCT_PACKAGES += \
     sensors.msm8226
 
 # TextClassifier
-PRODUCT_PACKAGES += \
-    textclassifier.bundle1
 
 # Thermal
 ifneq ($(filter titan, $(TARGET_DEVICE)),)
@@ -360,22 +342,19 @@ PRODUCT_PACKAGES += \
     libshims_thermal
 
 # Trust HAL
-PRODUCT_PACKAGES += \
-    vendor.lineage.trust@1.0-service
 
 # /system FS resize
 PRODUCT_PACKAGES += \
-    e2fsck_static \
-    resize2fs_static
+    e2fsck_static
 
 # USB
 PRODUCT_PACKAGES += \
-    android.hardware.usb@1.0-service.basic \
+    android.hardware.usb@1.3-service.basic \
     com.android.future.usb.accessory
 
 # Vibrator
 PRODUCT_PACKAGES += \
-    android.hardware.vibrator@1.0-impl
+    android.hardware.vibrator-service.legacy
 
 # WCNSS
 PRODUCT_COPY_FILES += \
@@ -388,7 +367,7 @@ PRODUCT_PACKAGES += \
 
 # WiFi HAL
 PRODUCT_PACKAGES += \
-    android.hardware.wifi@1.0-service.legacy
+    android.hardware.wifi-service
 
 # Wifi
 PRODUCT_PACKAGES += \
@@ -402,7 +381,5 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     libcurl \
-    libqsap_sdk \
-    libQWiFiSoftApCfg \
     libwpa_client \
     wificond

@@ -39,8 +39,6 @@ TARGET_CPU_VARIANT_RUNTIME := krait
 TARGET_BOOTLOADER_BOARD_NAME := MSM8226
 TARGET_NO_BOOTLOADER := true
 
-# Binder API version
-TARGET_USES_64_BIT_BINDER := true
 
 # Kernel
 BOARD_DTBTOOL_ARGS := --force-v2
@@ -76,8 +74,6 @@ TARGET_USES_QCOM_MM_AUDIO := true
 USE_CUSTOM_AUDIO_POLICY := 1
 USE_XML_AUDIO_POLICY_CONF := 1
 
-# APEX
-TARGET_FLATTEN_APEX := true
 
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(VENDOR_PATH)/bluetooth
@@ -88,7 +84,6 @@ QCOM_BT_USE_BTNV := true
 
 # Broken Rules
 BUILD_BROKEN_DUP_RULES := true
-BUILD_BROKEN_PHONY_TARGETS := true
 
 # Camera
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
@@ -139,6 +134,12 @@ MALLOC_SVELTE := true
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072
 
+# Vendor lives on the old cache partition (Android 16 keeps its cache in
+# /data), so system and vendor are split like on newer devices without
+# repartitioning. The size is set per device.
+TARGET_COPY_OUT_VENDOR := vendor
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+
 # Properties
 TARGET_SYSTEM_PROP += $(VENDOR_PATH)/system.prop
 
@@ -181,7 +182,6 @@ TARGET_LD_SHIM_LIBS := \
     /system/lib/hw/camera.vendor.msm8226.so|libshims_camera.so \
     /system/lib/libmot_sensorlistener.so|libshims_sensorlistener.so \
     /system/vendor/lib/libqc-opt.so|libshim_qcopt.so \
-    /system/lib/libmdmcutback.so|libqsap_shim.so \
     /system/lib/libskia.so|libshim_skia.so \
     /system/vendor/lib/libperipheral_client.so|libshim_binder.so
 
@@ -199,3 +199,6 @@ WIFI_DRIVER_FW_PATH_AP := "ap"
 WIFI_DRIVER_FW_PATH_STA := "sta"
 WIFI_HIDL_FEATURE_DISABLE_AP_MAC_RANDOMIZATION := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
+
+# Power
+TARGET_USES_INTERACTION_BOOST := true

@@ -24,7 +24,8 @@ LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
 
-# libqsap_sdk
+# libqsap_sdk (system/qcom/softap is gone on Android 16)
+ifneq ($(wildcard system/qcom/softap/sdk),)
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := libqsap_shim.c
 LOCAL_SHARED_LIBRARIES := libqsap_sdk liblog
@@ -33,6 +34,7 @@ LOCAL_MODULE := libqsap_shim
 LOCAL_MODULE_TAGS := optional
 LOCAL_PROPRIETARY_MODULE := true
 include $(BUILD_SHARED_LIBRARY)
+endif
 
 include $(CLEAR_VARS)
 
