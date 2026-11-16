@@ -222,3 +222,6 @@ WPA_SUPPLICANT_VERSION := VER_0_8_X
 
 # Power
 TARGET_USES_INTERACTION_BOOST := true
+
+# fstab mounts /cache, which isn't created by default any more
+BOARD_ROOT_EXTRA_FOLDERS += cache
