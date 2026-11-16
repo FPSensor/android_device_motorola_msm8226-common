@@ -44,6 +44,10 @@ TARGET_NO_BOOTLOADER := true
 BOARD_DTBTOOL_ARGS := --force-v2
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_CMDLINE := androidboot.bootdevice=msm_sdcc.1 androidboot.hardware=qcom vmalloc=400M utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags loop.max_part=7 androidboot.selinux=permissive
+ifneq ($(TARGET_BUILD_VARIANT),user)
+# Mount the adbd APEX with the bootstrap ones (adb in early-init)
+BOARD_KERNEL_CMDLINE += androidboot.apex.early_adbd=true
+endif
 BOARD_KERNEL_IMAGE_NAME := zImage
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true

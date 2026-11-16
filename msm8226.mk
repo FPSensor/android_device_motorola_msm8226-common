@@ -296,6 +296,11 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 # VINTF: the 4.4 era HALs predate the current framework matrices
 PRODUCT_ENFORCE_VINTF_MANIFEST_OVERRIDE := true
 
+# Radio: Android 16 telephony needs IRadio >= 1.4, libril serves 1.1
+PRODUCT_PACKAGES += \
+    android.hardware.radio@1.4-service.msm8226 \
+    android.hardware.radio.config@1.1-service.msm8226
+
 # Compatibility for the old vendor blobs
 PRODUCT_PACKAGES += \
     libcnefeatureconfig \
@@ -395,3 +400,20 @@ PRODUCT_PACKAGES += \
     libcurl \
     libwpa_client \
     wificond
+
+# Bring-up debugging (non-user builds): adbd in early-init, as root and
+# without authorization, and no Rescue Party (there's no recovery to fall
+# back to).
+ifneq ($(TARGET_BUILD_VARIANT),user)
+PRODUCT_PACKAGES += \
+    init.debug.adb.rc
+
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.secure=0 \
+    ro.adb.secure=0 \
+    service.adb.root=1 \
+    persist.sys.usb.config=adb \
+    persist.sys.disable_rescue=true \
+    ro.logd.kernel=true \
+    persist.logd.size=4M
+endif
