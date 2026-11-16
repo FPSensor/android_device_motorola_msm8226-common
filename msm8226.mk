@@ -257,8 +257,8 @@ PRODUCT_COPY_FILES += \
 
 # Keystore
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@3.0-impl \
-    android.hardware.keymaster@3.0-service
+    android.hardware.gatekeeper@1.0-service.software \
+    android.hardware.keymaster@4.1-service
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -315,6 +315,12 @@ PRODUCT_COMPRESSED_APEX := false
 
 # The prebuilt qcrilhook/qcnvitems jars fail the uses-libraries check
 PRODUCT_BROKEN_VERIFY_USES_LIBRARIES := true
+
+# Only verify apps on first boot: compiling them all with dex2oat takes
+# half an hour on the Cortex-A7, and the JIT compiles what gets used
+PRODUCT_SYSTEM_PROPERTIES += \
+    pm.dexopt.first-boot=verify \
+    pm.dexopt.boot-after-ota=verify
 
 # Compatibility for the old vendor blobs
 PRODUCT_PACKAGES += \
