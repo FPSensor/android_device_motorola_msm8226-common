@@ -143,14 +143,23 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     charger_res_images
 
-# Dalvik properties
+# Dalvik properties (AOSP's phone-xhdpi-1024 profile: these have 1 GB)
 PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.heapstartsize=16m \
-    dalvik.vm.heapgrowthlimit=192m \
+    dalvik.vm.heapstartsize=8m \
+    dalvik.vm.heapgrowthlimit=96m \
     dalvik.vm.heapsize=256m \
     dalvik.vm.heaptargetutilization=0.75 \
     dalvik.vm.heapminfree=512k \
     dalvik.vm.heapmaxfree=8m
+
+# Low RAM device: fewer cached processes, lighter recents and apps. Without
+# it the swap fills up, nothing gets killed and the UI crawls.
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.config.low_ram=true
+
+# No blur: far too expensive for an Adreno 305
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.surface_flinger.supports_background_blur=0
 
 PRODUCT_PROPERTY_OVERRIDES += \
     pm.dexopt.shared=quicken \
