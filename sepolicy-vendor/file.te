@@ -1,0 +1,9 @@
+# Mount points at the root
+type tmp_root_mount_file, file_type;
+
+# Modem firmware partitions (no xattrs: mounted with context=)
+type firmware_file, vendor_file_type, file_type;
+
+# sysfs
+type sysfs_graphics, fs_type, sysfs_type;
+type sysfs_soc, fs_type, sysfs_type;

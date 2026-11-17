@@ -198,7 +198,7 @@ SELINUX_IGNORE_NEVERALLOWS := true
 #BOARD_PLAT_PRIVATE_SEPOLICY_DIR += $(VENDOR_PATH)/sepolicy/private
 
 BOARD_SEPOLICY_DIRS += \
-	$(VENDOR_PATH)/sepolicy-tmp
+	$(VENDOR_PATH)/sepolicy-vendor
 
 # Shims
 TARGET_LD_SHIM_LIBS := \
