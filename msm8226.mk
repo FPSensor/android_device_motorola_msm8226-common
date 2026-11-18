@@ -305,7 +305,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_DEXPREOPT_SPEED_APPS += \
     Settings \
     SystemUI \
-    TrebuchetQuickStep
+    Launcher3QuickStep
 
 # Radio
 
