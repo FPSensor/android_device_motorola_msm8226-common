@@ -23,5 +23,8 @@
 
     <!-- Default screen brightness, from 0 to 255. 94 is 37%. -->
     <integer name="def_screen_brightness">94</integer>
+    <!-- Half length window animations: they cost frames on the Cortex-A7 -->
+    <fraction name="def_window_animation_scale">50%</fraction>
+    <fraction name="def_window_transition_scale">50%</fraction>
 
 </resources>
